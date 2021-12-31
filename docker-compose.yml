@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mcone:
+    build: /
+    ports:
+      - 8080:8080
+networks:
+  default:
+    external:
+      name: mctwo_default
