@@ -1,11 +1,9 @@
 package ru.charov.mcone.service;
 
-import com.google.gson.Gson;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.converter.GsonMessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
@@ -41,13 +39,13 @@ public class MC1Service {
     private WebSocketStompClient stompClient;
     private StompSession session;
 
-    @Autowired
     private MessageRepository repository;
 
-    @Autowired
-    private Gson mapper;
+    private GsonMessageConverter gsonMessageConverter;
 
-    public MC1Service() {
+    public MC1Service(MessageRepository repository, GsonMessageConverter gsonMessageConverter) {
+        this.repository = repository;
+        this.gsonMessageConverter = gsonMessageConverter;
         start();
     }
 
@@ -59,8 +57,7 @@ public class MC1Service {
         client = new StandardWebSocketClient();
         stompClient = new WebSocketStompClient(client);
 
-
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+        stompClient.setMessageConverter(gsonMessageConverter);
 
         StompSessionHandler sessionHandler = new MC1StompSessionHandler();
         try {
@@ -82,8 +79,7 @@ public class MC1Service {
                 .session_id(sessionId)
                 .build();
 
-        var msgTxt = mapper.toJson(msg);
-        session.send("/mc2/send", msgTxt);
+        session.send("/mc2/send", msg);
 
         count += 1;
     }

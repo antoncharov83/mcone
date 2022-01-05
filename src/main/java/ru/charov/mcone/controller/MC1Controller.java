@@ -46,6 +46,7 @@ public class MC1Controller {
     @PostMapping("/send")
     public ResponseEntity send(@RequestBody String msgTxt) {
         var msg = mapper.fromJson(msgTxt, Message.class);
+        log.info("MESSAGE ++++++++++++++++++++ " + msgTxt);
         msg.setEnd_timestamp(LocalDateTime.now());
         mc1Service.save(msg);
         if (mc1Service.isCanSend()) {
