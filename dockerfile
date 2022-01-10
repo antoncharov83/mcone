@@ -4,5 +4,5 @@ WORKDIR /home/gradle/src
 RUN gradle build --no-daemon
 FROM amazoncorretto:11-alpine-jdk
 MAINTAINER charov
-COPY --from=build /home/gradle/src/build/libs/*.jar /mcone-1.0.0.jar
+COPY --from=build /home/gradle/src/build/libs/mcone-0.0.1-SNAPSHOT.jar /mcone-1.0.0.jar
 ENTRYPOINT ["java","-jar","/mcone-1.0.0.jar"]
