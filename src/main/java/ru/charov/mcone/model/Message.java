@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Integer session_id;
